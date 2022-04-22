@@ -9,7 +9,6 @@ import 'package:myqr/screens/scanqr.dart';
 import 'package:myqr/screens/creaqr.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
-
 class App extends StatefulWidget {
   App({Key? key}) : super(key: key);
 
@@ -22,6 +21,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    
 
     List<Widget> _widgetOptions = <Widget>[
       ScanQR(),
@@ -34,7 +34,7 @@ class _AppState extends State<App> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       appBar: AppBar(
-        title: Text('MY QR'),
+        title: const Center(child: Text('MY QR')),
       ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -45,8 +45,7 @@ class _AppState extends State<App> {
                 blurRadius: 20,
                 color: Colors.black.withOpacity(.1),
               )
-            ],
-            borderRadius: const BorderRadius.all(Radius.circular(40))),
+            ], borderRadius: const BorderRadius.all(Radius.circular(40))),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1),
