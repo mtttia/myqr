@@ -10,6 +10,7 @@ class Chronology with ChangeNotifier {
 
   List<String> get chronology => _chronology;
   bool get isLoading => _isLoading;
+  String get last => _chronology[_chronology.length - 1];
 
   Chronology() {
     fs.load().then((value) {
@@ -20,5 +21,12 @@ class Chronology with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     });
+  }
+
+  push(String s) {
+    _chronology.remove(s);
+    _chronology.add(s);
+    fs.setData(jsonEncode(_chronology));
+    notifyListeners();
   }
 }

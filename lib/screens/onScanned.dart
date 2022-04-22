@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myqr/palette.dart';
 import 'package:myqr/utils/util.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:myqr/providers/chronology.dart';
 
 
 class OnScanned extends StatelessWidget {
@@ -10,13 +12,16 @@ class OnScanned extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Chronology chronology = context.watch<Chronology>();
+    chronology.push(code);
+    
     return Scaffold(
         appBar: AppBar(
           title: const Text('MY QR'),
         ),
         body: Container(
           padding:const EdgeInsets.symmetric(horizontal: 20),
-          margin: EdgeInsets.only(top: 30),
+          margin:const EdgeInsets.only(top: 30),
           child: Stack(
             children: <Widget>[
               Center(
