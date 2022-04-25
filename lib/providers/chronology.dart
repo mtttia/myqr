@@ -11,22 +11,37 @@ class Chronology with ChangeNotifier {
   List<String> get chronology => _chronology;
   bool get isLoading => _isLoading;
   String get last => _chronology[_chronology.length - 1];
+  bool get isEmpty => _chronology.isEmpty;
 
   Chronology() {
-    fs.load().then((value) {
-      _chronology = jsonDecode(value);
-      _isLoading = false;
-      notifyListeners();
-    }).catchError((error, stackTrace) {
-      _isLoading = false;
-      notifyListeners();
-    });
+    _loader();
   }
 
-  push(String s) {
+  _loader() async {
+    try {
+      String value = await fs.load();
+      _chronology = (jsonDecode(value) as List<dynamic>)
+          .map((e) => e.toString())
+          .toList();
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  push(String s) async {
     _chronology.remove(s);
     _chronology.add(s);
-    fs.setData(jsonEncode(_chronology));
     notifyListeners();
+    await fs.setData(jsonEncode(_chronology));
+    await fs.save();
+  }
+
+  remove(String s) async {
+    _chronology.remove(s);
+    notifyListeners();
+    await fs.setData(jsonEncode(_chronology));
   }
 }

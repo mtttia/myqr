@@ -7,6 +7,6 @@ void urlLauncher(String value) {
   }
   else{
     Uri uri = Uri(host: 'www.google.com', path: '/search', queryParameters: {'q': value});
-    launch(uri.toString());
+    launch('https:${uri.toString()}');
   }
 }

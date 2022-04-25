@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //import chronology
 import 'package:myqr/providers/chronology.dart';
+import 'package:myqr/providers/theme.dart';
 //import palette
 import 'package:myqr/palette.dart';
 import 'package:myqr/screens/chronqr.dart';
 import 'package:myqr/screens/scanqr.dart';
 import 'package:myqr/screens/creaqr.dart';
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class App extends StatefulWidget {
   App({Key? key}) : super(key: key);
@@ -21,10 +22,16 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    
+    ThemeProvider theme = context.watch<ThemeProvider>();
 
     List<Widget> _widgetOptions = <Widget>[
-      ScanQR(),
+      ScanQR(
+        (() {
+          setState(() {
+            _selectedIndex = 2;
+          });
+        }),
+      ),
       CreateQR(),
       ChronQR(),
     ];
@@ -35,42 +42,60 @@ class _AppState extends State<App> {
       ),
       appBar: AppBar(
         title: const Center(child: Text('MY QR')),
+        leading: IconButton(
+          icon: Icon(theme.light ? Icons.dark_mode : Icons.light_mode),
+          onPressed: (){
+            theme.toggleTheme();
+          },
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showLicensePage(context: context);
+              },
+              icon: const Icon(Icons.info_outline))
+        ],
       ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
         decoration: BoxDecoration(
-            // color: background,
+            color: theme.light ? backgroundColor : darkBackgroundColor,
             boxShadow: [
               BoxShadow(
                 blurRadius: 20,
                 color: Colors.black.withOpacity(.1),
               )
-            ], borderRadius: const BorderRadius.all(Radius.circular(40))),
+            ],
+            borderRadius: const BorderRadius.all(Radius.circular(40))),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1),
-            child: BottomNavyBar(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: GNav(
+              activeColor: theme.light ? primaryColor : lightColor,
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+              // tabActiveBorder: Border.all(color: primaryColor, style: BorderStyle.solid, width: 1),
+              tabBackgroundColor: theme.light ? primaryColor.withOpacity(.2) : lightColor.withOpacity(.2),
+              backgroundColor: theme.light ? backgroundColor : darkBackgroundColor,
               selectedIndex: _selectedIndex,
-              showElevation: false, // use this to remove appBar's elevation
-              onItemSelected: (index) => setState(() {
+              onTabChange: (index) => setState(() {
                 _selectedIndex = index;
                 // _pageController.animateToPage(index,duration: Duration(milliseconds: 300), curve: Curves.ease);
               }),
-              items: [
-                BottomNavyBarItem(
-                  icon: Icon(Icons.photo_camera),
-                  title: Text('Scan QR'),
-                  activeColor: primaryColor,
+              tabs: const [
+                GButton(
+                  icon: Icons.photo_camera,
+                  text: 'Scan QR',
+                  // activeColor: primaryColor,
                 ),
-                BottomNavyBarItem(
-                  icon: Icon(Icons.qr_code),
-                  title: Text('Crea QR'),
-                  activeColor: primaryColor,
+                GButton(
+                  icon: Icons.qr_code,
+                  text: 'Crea QR',
+                  // activeColor: primaryColor,
                 ),
-                BottomNavyBarItem(
-                  icon: Icon(Icons.history),
-                  title: Text('Cronologia'),
-                  activeColor: primaryColor,
+                GButton(
+                  icon: Icons.history,
+                  text: 'Cronologia',
+                  // activeColor: primaryColor,
                 ),
               ],
             ),
@@ -80,3 +105,8 @@ class _AppState extends State<App> {
     );
   }
 }
+
+
+/*
+
+ */
