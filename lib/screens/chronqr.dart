@@ -32,7 +32,7 @@ class ChronQR extends StatelessWidget {
 
                   // A pane can dismiss the Slidable.
                   dismissible: DismissiblePane(onDismissed: () {
-                    list.remove(e);
+                    
                     chronology.remove(e);
                   }),
                   children: [

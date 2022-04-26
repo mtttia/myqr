@@ -10,6 +10,8 @@ import 'package:myqr/screens/scanqr.dart';
 import 'package:myqr/screens/creaqr.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+
+
 class App extends StatefulWidget {
   App({Key? key}) : super(key: key);
 
@@ -43,7 +45,7 @@ class _AppState extends State<App> {
       appBar: AppBar(
         title: const Center(child: Text('MY QR')),
         leading: IconButton(
-          icon: Icon(theme.light ? Icons.dark_mode : Icons.light_mode),
+          icon: Icon(theme.light ? Icons.light_mode : Icons.dark_mode),
           onPressed: (){
             theme.toggleTheme();
           },
@@ -69,7 +71,7 @@ class _AppState extends State<App> {
             borderRadius: const BorderRadius.all(Radius.circular(40))),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: GNav(
               activeColor: theme.light ? primaryColor : lightColor,
               padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),

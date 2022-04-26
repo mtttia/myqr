@@ -4,6 +4,7 @@ import 'package:myqr/providers/theme.dart';
 //import util.dart
 import 'package:myqr/utils/util.dart';
 import 'package:path/path.dart';
+import 'package:myqr/palette.dart';
 
 class ChronologyCard extends StatelessWidget {
   ChronologyCard(this.val, {Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class ChronologyCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: theme.light ? Colors.white : Colors.black.withOpacity(.8),
+          color: theme.light ? Colors.white : Color.fromARGB(255, 35, 35, 35),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),

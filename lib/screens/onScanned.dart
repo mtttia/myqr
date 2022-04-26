@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:myqr/providers/chronology.dart';
 import 'package:myqr/providers/theme.dart';
 import 'package:confetti/confetti.dart';
+import 'package:clipboard/clipboard.dart';
+import 'package:share_plus/share_plus.dart';
 
 class OnScanned extends StatelessWidget {
   OnScanned(this.code, {Key? key}) : super(key: key);
@@ -96,10 +98,12 @@ class OnScanned extends StatelessWidget {
                               foregroundColor:
                                   MaterialStateProperty.resolveWith(
                                       (states) => Colors.black)),
-                          onPressed: () {},
+                          onPressed: () {
+                            Share.share(code);
+                          },
                         ),
                         width: double.infinity,
-                      )
+                      ),
                     ],
                   )),
             ],

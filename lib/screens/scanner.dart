@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:myqr/palette.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:myqr/screens/onScanned.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:scan/scan.dart';
 
 class Scanner extends StatefulWidget {
   Scanner({Key? key}) : super(key: key);
@@ -39,6 +41,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final ImagePicker _picker = ImagePicker();
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -56,10 +59,12 @@ class _QRViewExampleState extends State<QRViewExample> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Expanded(flex: 4, child: Hero(
-            tag: 'qr',
-            child: _buildQrView(context),
-          )),
+          Expanded(
+              flex: 4,
+              child: Hero(
+                tag: 'qr',
+                child: _buildQrView(context),
+              )),
           Expanded(
             flex: 1,
             child: FittedBox(
@@ -112,7 +117,24 @@ class _QRViewExampleState extends State<QRViewExample> {
                                 }
                               },
                             )),
-                      )
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: IconButton(
+                            onPressed: () async {
+                              final XFile? image = await _picker.pickImage(
+                                  source: ImageSource.gallery);
+                              if (image != null) {
+                                print("PATH IS COMING: " + image.path);
+                                String? qrScanned = await Scan.parse(image.path);
+                                print("QR SCANNED: $qrScanned");
+                                _onCodeScanned(qrScanned.toString(), context);
+                              } else {
+                                print('image is NULL');
+                              }
+                            },
+                            icon: const Icon(Icons.folder)),
+                      ),
                     ],
                   ),
                 ],
@@ -125,14 +147,14 @@ class _QRViewExampleState extends State<QRViewExample> {
   }
 
   _onCodeScanned(
-      Barcode barcode, QRViewController controller, BuildContext context) {
+      String barcode, BuildContext context) {
     //show message with 'Annulla' and OK'
     //push onScanned in Navigator Material Route and pass barcode.code
     Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => OnScanned(barcode.code.toString()),
+        builder: (context) => OnScanned(barcode),
       ),
     );
   }
@@ -165,7 +187,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     });
     controller.scannedDataStream.listen((scanData) async {
       await controller.pauseCamera();
-      _onCodeScanned(scanData, controller, context);
+      _onCodeScanned(scanData.code.toString(), context);
       setState(() {
         result = scanData;
       });
